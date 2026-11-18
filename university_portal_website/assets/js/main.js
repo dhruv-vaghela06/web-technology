@@ -1,0 +1,11 @@
+document.addEventListener("DOMContentLoaded",()=>{
+ const menu=document.getElementById("mobileMenu"),nav=document.getElementById("mainNav");
+ if(menu&&nav)menu.addEventListener("click",()=>nav.classList.toggle("open"));
+ document.querySelectorAll(".main-nav a").forEach(a=>a.addEventListener("click",()=>nav?.classList.remove("open")));
+ const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target);}}),{threshold:.12});
+ document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+ const counters=document.querySelectorAll("[data-count]");
+ if(counters.length){const counterObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){const el=entry.target,target=Number(el.dataset.count);let n=0;const step=Math.max(1,Math.ceil(target/35));const timer=setInterval(()=>{n=Math.min(target,n+step);el.textContent=n+(target===92?"%":"+");if(n>=target)clearInterval(timer);},35);counterObserver.unobserve(el);}}),{threshold:.5});counters.forEach(c=>counterObserver.observe(c));}
+ const contact=document.getElementById("contactForm");
+ if(contact)contact.addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("contactName").value.trim(),email=document.getElementById("contactEmail").value.trim(),topic=document.getElementById("contactTopic").value,msg=document.getElementById("contactMessage").value.trim(),err=document.getElementById("contactError");err.textContent="";if(name.length<3){err.textContent="Please enter your full name (at least 3 characters).";return;}if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(email)){err.textContent="Please enter a valid email address.";return;}if(!topic){err.textContent="Please select an enquiry topic.";return;}if(msg.length<10){err.textContent="Please enter a message of at least 10 characters.";return;}err.style.color="#247b5d";err.textContent="Thank you! Your demo enquiry passed validation. No message was sent.";contact.reset();});
+});
